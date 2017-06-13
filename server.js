@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({
 app.use(express.static("public"));
 
 
-mongoose.connect("mongodb://heroku_rrj9mlws:hqtd47rrelr7d7srn9hpdpa0bj@ds163721.mlab.com:63721/heroku_rrj9mlws");
+mongoose.connect("mongodb://heroku_5q2c8h66:48777gsutljglgv2gpcevj5e0a@ds031972.mlab.com:31972/heroku_5q2c8h66");
 var db = mongoose.connection;
 
 
@@ -40,11 +40,11 @@ db.once("open", function() {
 
 app.get("/scrape", function(req, res) {
 
-    request("http://www.univision.com/noticias", function(error, response, html) {
+    request("https://www.nytimes.com/", function(error, response, html) {
 
         var $ = cheerio.load(html);
         
-        $("ul.uvn-flex-opening-enhanced-flavorc li").each(function(i, element) {
+        $("ul.portal-posts-list li").each(function(i, element) {
 
 
             var result = {};
@@ -74,7 +74,7 @@ app.get("/scrape", function(req, res) {
 
 app.get("/articles", function(req, res) {
 
-    Article.find({}, function(error, doc) {
+    article.find({}, function(error, doc) {
 
         if (error) {
             console.log(error);
@@ -86,7 +86,7 @@ app.get("/articles", function(req, res) {
 
 app.get("/articles/:id", function(req, res) {
 
-    Article.findOne({ "_id": req.params.id })
+    article.findOne({ "_id": req.params.id })
 
     .populate("note")
 
@@ -104,7 +104,7 @@ app.get("/articles/:id", function(req, res) {
 
 app.post("/articles/:id", function(req, res) {
 
-    var newNote = new Note(req.body);
+    var newNote = new note(req.body);
 
     newNote.save(function(error, doc) {
 
